@@ -52,17 +52,17 @@ MILLER_COMPREHENSIVE_KB = {
 
 # تابع مغز آنست‌کام
 def ask_anestkam(prompt):
-  GAPGPTMASKTOKENa4u1p0bicxbX1X = None
+  GAPGPTMASKTOKENcirdxa2m5yX1X = None
   source = "یافت نشد"
 
   if "OPENROUTER_API_KEY" in st.secrets:
-      [GAPGPTMASKTOKENa4u1p0bicxbX2X = GAPGPTMASKTOKENa4u1p0bicxbX3X"OPENROUTER_API_KEY"]
+    GAPGPTMASKTOKENcirdxa2m5yX2X = GAPGPTMASKTOKENcirdxa2m5yX3X"OPENROUTER_API_KEY"]
     source = "Streamlit Secrets"
   elif os.getenv("OPENROUTER_API_KEY"):
-    GAPGPTMASKTOKENa4u1p0bicxbX4X = os.getenv("OPENROUTER_API_KEY")
+    GAPGPTMASKTOKENcirdxa2m5yX4X = os.getenv("OPENROUTER_API_KEY")
     source = "Environment Variable"
 
-  if not GAPGPTMASKTOKENa4u1p0bicxbX5X:
+  if not GAPGPTMASKTOKENcirdxa2m5yX5X:
     return (
         "❌ **کلید پیدا نشد!**\nلطفاً مقدار OPENROUTER_API_KEY را در Secrets"
         " استریم‌لیت چک کنید.",
@@ -72,7 +72,7 @@ def ask_anestkam(prompt):
   try:
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
-        GAPGPTMASKTOKENa4u1p0bicxbX6X=GAPGPTMASKTOKENa4u1p0bicxbX7X,
+        GAPGPTMASKTOKENcirdxa2m5yX6X=GAPGPTMASKTOKENcirdxa2m5yX7X,
         default_headers={
             "HTTP-Referer": "https://streamlit.app",
             "X-Title": "ANESTKAM",
