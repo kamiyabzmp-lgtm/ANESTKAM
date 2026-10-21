@@ -31,47 +31,54 @@ st.markdown(
 
 # بانک اطلاعاتی پشتیبان میلر
 MILLER_COMPREHENSIVE_KB = {
-    "مالمپاتی": "امتیازدهی مالمپاتی (Mallampati): ارزیابی راه هوایی از کلاس I تا IV.",
-    "روکورونیوم": "دوز انتوباسیون روکورونیوم: 0.6 الی 1.2 میلی‌گرم بر کیلوگرم.",
-    "هایپرترمی بدخیم": "درمان MH: قطع داروهای محرک، دانترولن 2.5 mg/kg، اکسیژن 100%.",
-    "کاپنوگرافی": "موج شارک فین (Shark-fin): نشانه اسپاسم برنش و انسداد بازدمی (COPD/Asthma).",
-    "npo": "دستورالعمل ناشتایی: آب و مایعات شفاف ۲ ساعت، غذای سنگین ۸ ساعت.",
+    "مالمپاتی": (
+        "امتیازدهی مالمپاتی (Mallampati): ارزیابی راه هوایی از کلاس I تا IV."
+    ),
+    "روکورونیوم": (
+        "دوز انتوباسیون روکورونیوم: 0.6 الی 1.2 میلی‌گرم بر کیلوگرم."
+    ),
+    "هایپرترمی بدخیم": (
+        "درمان MH: قطع داروهای محرک، دانترولن 2.5 mg/kg، اکسیژن 100%."
+    ),
+    "کاپنوگرافی": (
+        "موج شارک فین (Shark-fin): نشانه اسپاسم برنش و انسداد بازدمی"
+        " (COPD/Asthma)."
+    ),
+    "npo": (
+        "دستورالعمل ناشتایی: آب و مایعات شفاف ۲ ساعت، غذای سنگین ۸ ساعت."
+    ),
 }
 
 
-# تابع مغز آنست‌کام با خطایاب هوشمند
+# تابع مغز آنست‌کام
 def ask_anestkam(prompt):
-  # ۱. بررسی وجود کلید
-  GAPGPTMASKTOKEN5o5c3q6y543X0X = None
+  api_key = None
   source = "یافت نشد"
 
   if "OPENROUTER_API_KEY" in st.secrets:
-   api_key = st.secrets["OPENROUTER_API_KEY"]
+    api_key = GAPGPTMASKTOKENujncdwf5yfpX0X"OPENROUTER_API_KEY"]
     source = "Streamlit Secrets"
   elif os.getenv("OPENROUTER_API_KEY"):
-    GAPGPTMASKTOKEN5o5c3q6y543X3X = os.getenv("OPENROUTER_API_KEY")
+    api_key = os.getenv("OPENROUTER_API_KEY")
     source = "Environment Variable"
 
-  # اگر اصلاً کلید پیدا نشد
-  if not GAPGPTMASKTOKEN5o5c3q6y543X4X:
+  if not api_key:
     return (
-        "❌ **کلید پیدا نشد!**\nسیستم نتونست `OPENROUTER_API_KEY` رو بخونه. لطفاً"
-        " مطمئن شو توی بخش Secrets کلمه رو درست نوشتی.",
+        "❌ **کلید پیدا نشد!**\nلطفاً مقدار OPENROUTER_API_KEY را در Secrets"
+        " استریم‌لیت چک کنید.",
         "🔴 عدم دسترسی به کلید",
     )
 
-  # ۲. تلاش برای ارتباط با هوش مصنوعی
   try:
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
-        GAPGPTMASKTOKEN5o5c3q6y543X5X=GAPGPTMASKTOKEN5o5c3q6y543X6X,
+        api_key=api_key,
         default_headers={
             "HTTP-Referer": "https://streamlit.app",
             "X-Title": "ANESTKAM",
         },
     )
 
-    # تست مدل فوق‌العاده پایدار و رایگان Llama 3
     completion = client.chat.completions.create(
         model="meta-llama/llama-3.3-70b-instruct:free",
         messages=[
@@ -84,31 +91,28 @@ def ask_anestkam(prompt):
             },
             {"role": "user", "content": prompt},
         ],
-        timeout=15,
+        timeout=20,
     )
     return completion.choices[0].message.content, "🟢 آنلاین (Llama 3.3)"
 
   except Exception as err:
-    # چاپ دقیق علت خطا برای عیب‌یابی آنی
     error_msg = str(err)
-
-    # فال‌بک به میلر
     prompt_lower = prompt.lower()
     for k, v in MILLER_COMPREHENSIVE_KB.items():
       if k in prompt_lower:
         return (
-            f"🟠 **پاسخ میلر:**\n{v}\n\n*(علت عدم اتصال آنلاین: `{error_msg}`)*",
+            f"🟠 **پاسخ میلر:**\n{v}\n\n*(خطای آنلاین: `{error_msg}`)*",
             "🟠 آفلاین میلر",
         )
 
     return (
-        f"⚠️ **مغز آنلاین پاسخ نداد!**\n\n**پیام دقیق سرور:**\n`{error_msg}`\n\nمنبع"
-        f" کلید: {source}",
+        f"⚠️ **مغز آنلاین پاسخ نداد!**\n\n**پیام سرور:**\n`{error_msg}`\n\nمنبع:"
+        f" {source}",
         "🔴 خطای ارتباط",
     )
 
 
-# رابط کاربری چت
+# مدیریت تاریخچه پیام‌ها
 if "messages" not in st.session_state:
   st.session_state.messages = []
 
@@ -128,3 +132,4 @@ if user_input := st.chat_input("سوال هوشبری خود را بپرسید..
       st.caption(badge)
 
   st.session_state.messages.append({"role": "assistant", "content": res})
+
