@@ -42,18 +42,18 @@ MILLER_COMPREHENSIVE_KB = {
 # تابع مغز آنست‌کام با خطایاب هوشمند
 def ask_anestkam(prompt):
   # ۱. بررسی وجود کلید
-  GAPGPTMASKTOKEN9o77pdvukuX0X = None
+  GAPGPTMASKTOKEN5o5c3q6y543X0X = None
   source = "یافت نشد"
 
   if "OPENROUTER_API_KEY" in st.secrets:
-    GAPGPTMASKTOKEN9o77pdvukuX1X = GAPGPTMASKTOKEN9o77pdvukuX2X"OPENROUTER_API_KEY"]
+   api_key = st.secrets["OPENROUTER_API_KEY"]
     source = "Streamlit Secrets"
   elif os.getenv("OPENROUTER_API_KEY"):
-    GAPGPTMASKTOKEN9o77pdvukuX3X = os.getenv("OPENROUTER_API_KEY")
+    GAPGPTMASKTOKEN5o5c3q6y543X3X = os.getenv("OPENROUTER_API_KEY")
     source = "Environment Variable"
 
   # اگر اصلاً کلید پیدا نشد
-  if not GAPGPTMASKTOKEN9o77pdvukuX4X:
+  if not GAPGPTMASKTOKEN5o5c3q6y543X4X:
     return (
         "❌ **کلید پیدا نشد!**\nسیستم نتونست `OPENROUTER_API_KEY` رو بخونه. لطفاً"
         " مطمئن شو توی بخش Secrets کلمه رو درست نوشتی.",
@@ -64,7 +64,7 @@ def ask_anestkam(prompt):
   try:
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
-        GAPGPTMASKTOKEN9o77pdvukuX5X=GAPGPTMASKTOKEN9o77pdvukuX6X,
+        GAPGPTMASKTOKEN5o5c3q6y543X5X=GAPGPTMASKTOKEN5o5c3q6y543X6X,
         default_headers={
             "HTTP-Referer": "https://streamlit.app",
             "X-Title": "ANESTKAM",
@@ -128,4 +128,3 @@ if user_input := st.chat_input("سوال هوشبری خود را بپرسید..
       st.caption(badge)
 
   st.session_state.messages.append({"role": "assistant", "content": res})
-
