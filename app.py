@@ -34,38 +34,39 @@ MILLER_COMPREHENSIVE_KB = {
 
 # تابع مغز آنست‌کام
 def ask_anestkam(prompt):
-    api_key = None
+    key = None
     source = "یافت نشد"
 
-    if "OPENROUTER_API_KEY" in st.secrets:
-        api_key = st.secrets["OPENROUTER_API_KEY"]
+    if hasattr(st, "secrets") and "OPENROUTER_API_KEY" in st.secrets:
+        key = st.secrets["OPENROUTER_API_KEY"]
         source = "Streamlit Secrets"
     elif os.getenv("OPENROUTER_API_KEY"):
-        api_key = os.getenv("OPENROUTER_API_KEY")
+        key = os.getenv("OPENROUTER_API_KEY")
         source = "Environment Variable"
 
-    if not api_key:
+    if not key:
         return "❌ **کلید پیدا نشد!**\nلطفاً مقدار OPENROUTER_API_KEY را در Secrets استریم‌لیت چک کنید.", "🔴 عدم دسترسی به کلید"
 
     try:
         client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
-            api_key=api_key,
+            api_key=key,
             default_headers={
                 "HTTP-Referer": "https://streamlit.app",
                 "X-Title": "ANESTKAM",
             }
         )
         
+        # استفاده از مدل کاملاً رایگان و پرسرعت جیمینای 2 فلاش
         completion = client.chat.completions.create(
-            model="meta-llama/llama-3.3-70b-instruct:free",
+            model="google/gemini-2.0-flash-exp:free",
             messages=[
-                {"role": "system", "content": "تو آنست‌کام هستی؛ دستیار حرفه‌ای، صمیمی و علمی هوشبری. فارسی جواب بده."},
+                {"role": "system", "content": "تو آنست‌کام (ANESTKAM) هستی؛ دستیار حرفه‌ای، صمیمی، کاریزماتیک و علمی هوشبری تحت امضای KAMIY_IW. فارسی و با تسلط کامل بر رفرنس بیهوشی میلر و دوزهای دقیق پاسخ بده."},
                 {"role": "user", "content": prompt}
             ],
-            timeout=20
+            timeout=25
         )
-        return completion.choices[0].message.content, "🟢 آنلاین (Llama 3.3)"
+        return completion.choices[0].message.content, "🟢 آنلاین (Gemini 2.0 Flash)"
 
     except Exception as err:
         error_msg = str(err)
